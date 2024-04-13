@@ -131,6 +131,28 @@ def calculate_stock_data(data):
 
     return new_stock_data
 
+   
+def get_stock_values(data):
+    """
+    Retrieve stock values from a spreadsheet based on headings.
+    """
+    headings = SHEET.worksheet("stock").row_values(1)
+
+    result_dict = {}
+
+    for i in range(len(headings)):
+        # Check if the index is within the range of the data list
+        if i < len(data):
+            # If so, add the heading and its corresponding data value to the dictionary
+            result_dict[headings[i]] = data[i]
+        else:
+            # If not, assign an empty string as the value for the heading
+            result_dict[headings[i]] = ""
+
+    return result_dict
+
+
+
 def main():
     """
     Run all program functions
@@ -143,8 +165,13 @@ def main():
     sales_columns = get_last_5_entries_sales()
     stock_data = calculate_stock_data(sales_columns)
     update_worksheet(stock_data, "stock")
+    return stock_data
     
 
 print("Welcome to LoveSandwiches Data Automation")
-main()
+stock_data = main()
 
+
+stock_values = get_stock_values(stock_data)
+
+print(stock_values)
